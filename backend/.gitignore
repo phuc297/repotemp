@@ -153,5 +153,4 @@ staticfiles/*
 
 scripts/
 apps/**/migrations/*
-apps/**/static/**/css/*
-apps/**/static/**/js/*
+apps/**/static/**
