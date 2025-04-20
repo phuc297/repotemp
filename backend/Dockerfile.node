@@ -1,0 +1,9 @@
+FROM node:23-alpine3.20
+
+RUN mkdir -p /usr/src/backend
+WORKDIR /usr/src/backend
+
+RUN npm init -y
+RUN npm install tailwindcss@latest @tailwindcss/cli@4.1.3 daisyui@latest
+COPY . .
+# RUN npx @tailwindcss/cli -i ./staticfiles/css/input.css -o ./staticfiles/css/output.css

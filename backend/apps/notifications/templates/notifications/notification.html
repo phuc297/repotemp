@@ -1,0 +1,45 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+  <div class="flex flex-col items-center justify-center bg-white w-full">
+    <h1 class="p-4 pb-2 text-xl tracking-wide">Notifications</h1>
+    <!-- Notifications list -->
+    <ul class="list bg-base-100 w-1/3">
+      <!-- Notification -->
+      {% for notification in notifications %}
+        <li class="list-row w-full cursor-pointer rounded-box hover:shadow-sm">
+          <div>
+            <img class="size-10 rounded-box" src="https://img.daisyui.com/images/profile/demo/1@94.webp" />
+          </div>
+          <div>
+            <div class="font-semibold text-gray-700">
+              <span>{{ notification.message }}</span>
+              <span class="font-normal">{{ notification.timestamp }}</span>
+            </div>
+            <div class="text-xs text-gray-700 py-1">
+              {% if notification.related_object %}
+                <span>{{ notification.related_object }}</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <button class="rounded-full hover:bg-gray-200 w-10 h-10 flex items-center justify-center cursor-pointer">
+            <svg rpl="" fill="currentColor" height="16" icon-name="overflow-horizontal-fill" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+              <!-- ?lit$739076916$ -->
+              <!-- ?lit$739076916$ -->
+              <path d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"></path>
+              <!-- ? -->
+            </svg>
+          </button>
+        </li>
+      {% endfor %}
+
+      <!-- Notification -->
+    </ul>
+    <!-- Notifications list -->
+  </div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

@@ -1,0 +1,214 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load to_date %}
+{% load follow_tags %}
+{% load list_tags %}
+{% load string_tags %}
+{% block title %}
+  Home
+{% endblock %}
+{% block content %}
+  {% if user.is_authenticated %}
+    <div class="flex flex-col items-center justify-center bg-white w-full">
+      <!-- Main section -->
+      <div class="flex justify-center w-3/4">
+        <!-- Posts Section -->
+        <div class="bg-white w-full xl:w-2/4 mr-4">
+          <!-- Tab panel -->
+          <div class="text-sm font-semibold text-center rounded-lg border border-gray-200">
+            <ul class="flex flex-wrap -mb-px">
+              <li class="me-2">
+                <a href="#" class="tab-item inline-block p-4 rounded-t-lg text-green-500 border-green-500 border-b-2">For you</a>
+              </li>
+              <li class="me-2">
+                <a href="#" class="tab-item inline-block p-4 rounded-t-lg">Latest</a>
+              </li>
+              <li class="me-2">
+                <a href="#" class="tab-item inline-block p-4 rounded-t-lg">Popular</a>
+              </li>
+              <li class="me-2">
+                <a href="#" class="tab-item inline-block p-4 rounded-t-lg">Following</a>
+              </li>
+            </ul>
+          </div>
+          <!-- Tab panel -->
+          <!-- Post List -->
+          <div class="container mx-auto flex mt-6">
+            <!-- Posts content -->
+            <div class="p-4 w-full">
+              {% for post in posts %}
+                <div class="flex items-center border-b border-gray-200 px-4 pb-8 mt-8">
+                  <!-- Thumbnail -->
+                  <div class="flex-shrink-0">
+                    <a href="{% url 'posts:view' post.id %}">
+                      {% if post.thumbnail %}
+                        <img src="{{ post.thumbnail.url }}" alt="Thumbnail" class="hidden lg:block w-48 h-36 object-cover rounded-lg cursor-pointer" />
+                      {% else %}
+                        <img src="\defaultthumnail\analog-digital-learning-harmony_882186-15242.avif" alt="Thumbnail" class="hidden lg:block w-48 h-36 object-cover rounded-lg cursor-pointer" />
+                      {% endif %}
+                    </a>
+                  </div>
+                  <!-- Thumbnail -->
+                  <div class="h-36 ml-4 flex flex-col justify-between place-items-center flex-1">
+                    <!-- Post title -->
+                    <div class="flex flex-col justify-start items-start w-full">
+                      <a href="/posts/{{ post.id }}"><h3 class="text-lg font-semibold mb-1 cursor-pointer text-gray-800">{{ post.title }}</h3></a>
+                      <div id="post-description" class="mt-1 text-gray-700 text-sm hidden lg:block">{{ post.description }}</div>
+                    </div>
+                    <!-- Post title -->
+                    <!-- Post info -->
+                    <div class="post-info w-full">
+                      <div class="text-sm text-gray-600 flex justify-between">
+                        <div class="flex items-center space-x-2">
+                          <a href="{% url 'profile' post.author.id %}" class="flex items-center space-x-2">
+                            <img src="{{ post.author.avatar.url }}" alt="" class="h-12 w-12 rounded-full" />
+                            <span class="font-medium hover:underline cursor-pointer">{{ post.author }}</span>
+                          </a>
+                          <span class="lg:block hidden">{{ post.created_at|to_date }}</span>
+                        </div>
+                        <div class="justify-between items-center space-x-2 hidden lg:flex">
+                          <div class="flex justify-between rounded-lg">
+                            <button class="cursor-pointer hover:text-green-500 rounded-full hover:bg-gray-100 w-8 h-8 flex justify-center items-center">
+                              <span class="mb-0">
+                                <svg rpl="" fill="currentColor" height="16" icon-name="upvote-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Zm0-17.193L2.685 9.071a.251.251 0 0 0 .177.429H7.5v5.316A2.63 2.63 0 0 0 9.864 17.5a2.441 2.441 0 0 0 1.856-.682A2.478 2.478 0 0 0 12.5 15V9.5h4.639a.25.25 0 0 0 .176-.429L10 1.807Z"></path>
+                                </svg>
+                              </span>
+                            </button>
+                            <span class="text-gray-500 text-sm flex justify-center items-center">{{ post.votes }}</span>
+                            <button class="cursor-pointer hover:text-red-500 rounded-full hover:bg-gray-100 w-8 h-8 flex justify-center items-center">
+                              <span class="mb-0">
+                                <svg rpl="" fill="currentColor" height="16" icon-name="downvote-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                                  <g transform="rotate(180, 10, 10)">
+                                    <path d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Zm0-17.193L2.685 9.071a.251.251 0 0 0 .177.429H7.5v5.316A2.63 2.63 0 0 0 9.864 17.5a2.441 2.441 0 0 0 1.856-.682A2.478 2.478 0 0 0 12.5 15V9.5h4.639a.25.25 0 0 0 .176-.429L10 1.807Z"></path>
+                                  </g>
+                                </svg>
+                              </span>
+                            </button>
+                          </div>
+                          <div class="flex justify-between items-center">
+                            <span class="text-gray-500">
+                              <svg fill="currentColor" height="16" width="16" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 324.143 324.143" xml:space="preserve" stroke="#000000" stroke-width="6.48286">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                  <g>
+                                    <g>
+                                      <g>
+                                        <circle cx="88.071" cy="164.571" r="19"></circle> <circle cx="162.071" cy="164.571" r="19"></circle> <path d="M162.071,0C73.162,0,0.83,72.332,0.83,161.241c0,37.076,12.788,73.004,36.1,101.677 c-6.65,16.756-17.788,31.245-32.401,42.089c-2.237,1.66-3.37,4.424-2.94,7.177c0.429,2.754,2.349,5.042,4.985,5.942 c11.683,3.992,23.856,6.017,36.182,6.017c19.572,0,38.698-5.093,55.569-14.763c20.158,8.696,41.584,13.104,63.747,13.104 c88.909,0,161.241-72.333,161.241-161.242S250.98,0,162.071,0z M162.071,307.483c-21.32,0-41.881-4.492-61.11-13.351 c-2.292-1.057-4.959-0.891-7.102,0.443c-15.313,9.529-32.985,14.566-51.104,14.566c-6.053,0-12.065-0.564-17.981-1.684 c12.521-12.12,22.014-26.95,27.788-43.547c0.878-2.525,0.346-5.328-1.398-7.354C28.378,230.07,15.83,196.22,15.83,161.241 C15.83,80.604,81.434,15,162.071,15s146.241,65.604,146.241,146.241C308.313,241.88,242.709,307.483,162.071,307.483z"></path> <circle cx="236.071" cy="164.571" r="19"></circle>
+                                      </g>
+                                    </g>
+                                  </g>
+                                </g>
+                              </svg>
+                            </span>
+                            <span class="text-gray-500 text-sm px-1">{{ post.comments.count }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Post info -->
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <!-- Posts content -->
+          </div>
+          <!-- Post List -->
+          <!-- Pagination -->
+          <div class="flex justify-center mt-8">
+            <nav class="inline-flex space-x-2">
+              {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">Previous</a>
+              {% else %}
+                <span class="px-4 py-2 text-sm font-medium text-gray-400 bg-white border rounded cursor-not-allowed">Previous</span>
+              {% endif %}
+
+              {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                  <a href="?page={{ num }}" class="px-4 py-2 text-sm font-medium text-white bg-green-500 border rounded hover:bg-green-600">{{ num }}</a>
+                {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+                  <a href="?page={{ num }}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">{{ num }}</a>
+                {% elif num == 1 or num == page_obj.paginator.num_pages %}
+                  <a href="?page={{ num }}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">{{ num }}</a>
+                {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+                  <span class="px-4 py-2 text-sm font-medium text-gray-500">...</span>
+                {% endif %}
+              {% endfor %}
+
+              {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">Next</a>
+              {% else %}
+                <span class="px-4 py-2 text-sm font-medium text-gray-400 bg-white border rounded cursor-not-allowed">Next</span>
+              {% endif %}
+            </nav>
+          </div>
+          <!-- Pagination -->
+        </div>
+
+        <!-- Right Sidebar -->
+        <aside class="hidden xl:block ml-4 w-1/4">
+          <div class="flex flex-col p-4 bg-white sticky top-10 rounded-lg border border-gray-200">
+            <div class="p-4 side-bar-content">
+              <h3 class="text-lg font-bold text-gray-800 py-4">Recommended topics</h3>
+              <div class="flex flex-wrap gap-4 mb-4">
+                <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Technology</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Relationships</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Self Improvement</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Writing</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Cryptocurrency</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Politics</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Productivity</span>
+              </div>
+              <a href="" class="px-3 py-3 text-gray-500 hover:underline cursor-pointer">See more</a>
+            </div>
+            <div class="p-4 side-bar-content">
+              <h3 class="text-lg font-bold text-gray-800">Featured users</h3>
+              <div class="py-2">
+                {% for profile in profiles|head3 %}
+                  <div class="flex w-full items-center justify-center font-sans h-36">
+                    <div class="w-16 h-16">
+                      <a href="{% url 'profile' profile.id %}" class="w-16 h-16"><img class="w-16 rounded-full" src="{{ profile.avatar.url }}" alt="Avatar of Author" /></a>
+                    </div>
+                    <div class="w-3/4 max-w-3/4 px-2">
+                      <a href="{% url 'profile' profile.id %}"><p class="text-base leading-none text-gray-800">{{ profile }}</p></a>
+                      <span class="text-gray-500 text-xs">{{ profile.bio|shorten }}</span>
+                    </div>
+                    <div id="following-status">
+                      {% if user.profile.id != profile.id %}
+                        <button id="btn-unfollow" class="{% if user.profile|is_not_following:profile %}hidden{% endif %} w-20 bg-transparent border py-2 px-4 rounded-full border-green-500 text-xs text-green-500 flex justify-center items-center">Following</button>
+                        <button id="btn-follow" class="{% if user.profile|is_following:profile %}hidden{% endif %} w-20 bg-transparent border py-2 px-4 rounded-full border-gray-500 text-xs text-gray-500">Follow</button>
+                      {% endif %}
+                    </div>
+
+                    <script src="{% static 'posts/js/follow.js' %}" data-url="{% url 'follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ post.author.id }}" data-token="{{ csrf_token }}"></script>
+                  </div>
+                  <!--  -->
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  {% else %}
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold text-gray-800 mb-6">Welcome to Our Community</h1>
+        <p class="text-lg text-gray-600 mb-8">Your one-stop solution for all your needs. Join us to explore more!</p>
+        <div class="flex justify-center space-x-4">
+          <a href="/users/login/" class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600">Login</a>
+          <a href="/users/signup/" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600">Register</a>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block script %}
+  <script src="{% static 'layout/js/tabPanel.js' %}"></script>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

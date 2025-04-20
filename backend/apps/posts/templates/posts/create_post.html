@@ -1,0 +1,88 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load add_attrs %}
+{% load random_thumbnail %}
+{% load crispy_forms_tags %}
+
+{% load tailwind_filters %}
+
+{% block head %}
+  <title>{{ post.title }}</title>
+  <link rel="stylesheet" href="{% static 'posts/css/create_post.css' %}" />
+  <link rel="stylesheet" href="{% static 'posts/css/quill.bubble.css' %}" />
+  <!--  -->
+
+  {{ form.media }}
+{% endblock %}
+
+{% block content %}
+  <div class="container w-full mx-auto pt-5 text-gray-800 pt flex justify-center">
+    <form id="ql-editor-form" action="{% url 'posts:create' %}" method="POST" enctype="multipart/form-data" class="bg-white w-full flex flex-col items-center justify-center">
+      {% csrf_token %}
+      <!--  -->
+      <div id="post-main-content" class="w-full">
+        <div class="w-full mb-15">
+          <label class="text-gray-700 text-xl font-bold mb-4 mt-4">Title</label>
+          <div id="editor-title"></div>
+        </div>
+
+        <div class="w-full mb-15">
+          <label class="text-gray-700 text-xl font-bold mb-4 mt-4">Content</label>
+          {{ form.content }}
+        </div>
+      </div>
+
+      <!--  -->
+      <div id="post-info" class="hidden flex flex-col items-center justify-center">
+        <div class="w-1/2 pb-8">
+          <label for="editor-description" class="block text-gray-700 text-xl font-bold mb-4 pt-5">Description</label>
+          <div id="editor-description"></div>
+        </div>
+        <div class="w-1/2 pt-8">
+          <label for="id_category" class="block text-gray-700 text-xl font-bold mb-4 pt-5">Category</label>
+          {{ form.category|add_class:'border-gray-300 bg-white text-gray-700 rounded-lg border focus:outline-none px-4 h-8' }}
+        </div>
+        <div class="w-1/2">
+          <div>
+            <label for="id_thumbnail" class="block text-gray-700 text-xl font-bold mb-4 pt-5">Thumbnail</label>
+            {{ form.thumbnail|add_class:'border-gray-300 bg-white text-gray-700 rounded-lg border focus:outline-none px-4' }}
+            <div class="p-4">
+              <img src="{% random_thumnail %}" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--  -->
+      <label for="id_title" class="text-gray-700 text-xl font-bold mb-4 mt-4 hidden">Title</label>
+      <textarea name="title" cols="40" rows="10" id="id_title" class="hidden"></textarea>
+      <label for="id_description" class="text-gray-700 text-xl font-bold mb-4 mt-4 hidden">Title</label>
+      <textarea name="description" cols="40" rows="10" id="id_description" class="hidden"></textarea>
+
+      <div id="button-group">
+        <button id="btn-save" type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100">Save</button>
+        <button id="btn-next" type="button" class="text-white bg-green-500 hover:bg-green-600 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Next step</button>
+
+        <button id="btn-back" type="button" class="hidden py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100">Back</button>
+        <button id="btn-publish" type="submit" class="hidden text-white bg-green-500 hover:bg-green-600 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Publish</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script src="{% static 'js/quill.js' %}"></script>
+  <script src="{% static 'posts/js/custom_quill.js' %}"></script>
+  <script src="{% static 'posts/js/create_post.js' %}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const ql_editors = document.querySelectorAll('.ql-editor')
+      ql_editors.forEach((editor) => {
+        editor.setAttribute('spellcheck', 'false')
+      })
+    })
+  </script>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

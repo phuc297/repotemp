@@ -1,0 +1,60 @@
+services:
+  web:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+      # command: ["tail", "-f", "/dev/null"]
+      # command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c 
+      " python manage.py collectstatic --no-input
+        && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/usr/src/backend
+    env_file:
+      - ./.env.dev
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+
+  redis:
+    restart: unless-stopped
+    image: redis:8.0-rc1-alpine3.21
+    ports:
+      - 6379:6379
+    volumes: 
+      - cache:/data
+
+  node:
+    build:
+      context: backend
+      dockerfile: Dockerfile.node
+    command: npx @tailwindcss/cli -i ./staticfiles/css/input.css -o ./staticfiles/css/output.css --watch
+    tty: true
+    volumes:
+      - ./backend/staticfiles:/usr/src/backend/staticfiles
+      - ./backend/apps:/usr/src/backend/apps
+    depends_on:
+      web:
+        condition: service_started
+
+#   db:
+#     image: postgres
+#     restart: always
+#     user: postgres
+#     volumes:
+#       - db-data:/var/lib/postgresql/data
+#     env_file:
+#       - ./.env.prod.db
+#     ports:
+#       - 5432:5432
+#     healthcheck:
+#       test: [ "CMD", "pg_isready" ]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+volumes:
+  cache:
+
+
