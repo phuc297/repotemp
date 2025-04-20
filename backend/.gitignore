@@ -152,3 +152,4 @@ mediafiles/*
 staticfiles/*
 
 scripts/
+apps/**/migrations/*
